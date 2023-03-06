@@ -31,7 +31,7 @@ def main():
 
 def gen_target_state() -> np.ndarray:
     '''Make a flattened rectangle to memorize'''
-    target_state = np.ones((h.side_len,h.side_len), dtype = np.float32)
+    target_state = np.ones((h.side_len,h.side_len), dtype = np.float64)
     target_state[np.random.randint(0, h.side_len//2 - 1): np.random.randint(h.side_len//2 + 1, h.side_len),
                  np.random.randint(0, h.side_len//2 - 1): np.random.randint(h.side_len//2 + 1, h.side_len)]\
                 = -np.random.rand()
@@ -51,6 +51,7 @@ def gen_init_state(type:str = None) -> np.ndarray:
             '''
     if type is None or type.lower() == "random":
         state = np.random.rand(h.side_len**2) * 2 - 1
+        state = state.astype(np.float64)
         return state
     elif type.lower() == "masked":
         state = gen_target_state()
@@ -72,7 +73,6 @@ def update(state:np.ndarray, target_states:np.ndarray, beta=1) -> np.ndarray:
 def display(state_history:Union[list, np.ndarray], 
             target_states:Union[list, np.ndarray], 
             energy_history:Optional[Union[list, np.ndarray]]=None) -> bool:
-    
     if len(target_states) > 30:
         target_states = [target_states[0]]
         warnings.warn("Too many target states to render, defaulting to one")

@@ -3,7 +3,7 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 import matplotlib.pyplot as plt
 
-side_len = 4*2
+side_len = 4*4
 def gen_target_state() -> np.ndarray:
     '''Make a flattened rectangle to memorize'''
     target_state = np.ones((side_len,side_len), dtype = np.short)
