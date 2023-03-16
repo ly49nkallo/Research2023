@@ -11,12 +11,39 @@
 
 \begin{document}
 \maketitle
-Topic: 
-\section{Introduction}
+\textbf{Topic(s):}
+\begin{enumerate}
+    \item Enforcing Supercriticality in Hopfield neural networks
+    \item AIRR 
+    \item Using Reinforcement learning methods to train Energy Based Neural Networks
+    \item Using Sparse Hopfield networks for Immune Repatoire Classification
+    \item Sparse Hopfield Neural Networks for Deep learning
+    \item Boltzmann machines
+\end{enumerate}
+\section*{Abstract}
+\section*{Introduction}
+\section*{Purpose}
+\section*{Methods}
+\section*{Results}
+\section*{Discussion}
+\section*{Acknowledgements}
+\section*{Bibliography}
 \[E = -\text{lse}(\beta,\bm{X}^T\bm{\xi})+\frac 1 2 \bm{\xi}^T\bm{\xi} + \beta^{-1}\log{N} + \frac 1 2 M^2\]
 \[E_1(\bm{\xi}) = \frac 1 2 \bm{\xi}^T\bm{\xi}\]
 \[E_2(\bm{\xi}) = -\text{lse}(\beta, \bm{X}^T\bm{\xi})\]
 \[\nabla_\xi E_1^{t+1} = -\nabla_\xi E_2^{t}\]
 
-
+\section*{NOTES}
+\begin{itemize}
+    \item Hopfield Energy func: $E = -\frac 1 2 \xi^TW\xi+\xi^Tb$
+    \item Hopfield update rule: $\xi^{t+1}=\text{sgn}(W\xi^t-b)$
+    \item Modern Hopfield Energy func: $E = -\sum_{i=1}^N F(x_i^T\xi)$ where can be $F = \exp$
+    \item The above energy can also be written as $-\exp(\text{lse}(1,X^T\xi))$
+    \item Modern Hopfield update rule: $\xi^{new}[l] = \text{sgn}[-E(\xi^{(l+)}+E(\xi^{(l-)})]$
+    \item Continuous Valued Energy function: $-\text{lse}(\beta, X^T\xi) + \frac 1 2\xi^T\xi + \beta^{-1}\log{N} + \frac 1 2  M^2$, which is the log of the negative energy above.
+    \item $\nabla_\xi(\frac 1 2 \xi^T\xi) = \bm{1}$ and $-\nabla_\xi\text{lse}(\beta,X^T\xi) = X\text{softmax}(\beta X^T\xi)$, which means that
+    $\xi^{new} = X\text{softmax}(\beta X^T\xi)$, which is the new update procedure.
+    \item The above update rule can be generalized to $\Xi^{new} = X\text{softmax}(\beta X^T\Xi)$
+    \item 
+\end{itemize}
 \end{document}
