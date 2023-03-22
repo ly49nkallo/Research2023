@@ -8,19 +8,19 @@ from typing import Union, Optional
 import warnings
 
 def main():
-    target_states = gen_target_states(100)
+    target_states = gen_target_states(10)
     state = gen_init_state(type='random')
     
     cntr = 0
     new_energy, energy = 0, 1
     state_history = []
     energy_history = []
-    while cntr < 10 and new_energy < energy:
+    while cntr < 10 and new_energy < energy*0.9:
         state_history.append(state.copy())
         energy = new_energy
         cntr+=1
-        state = update(state, target_states)
-        new_energy = compute_energy(state, target_states)
+        state = update(state, target_states, beta=0.25)
+        new_energy = compute_energy(state, target_states, beta=0.25)
         energy_history.append(new_energy.reshape((1,)))
         print(new_energy)
     
@@ -58,7 +58,7 @@ def gen_init_state(type:str = None) -> np.ndarray:
         return state
 
 def compute_energy(state, target_states, beta=1):
-    assert np.max(np.abs(state)) <= 1 + 1e-2, np.max(np.abs(state))
+    assert np.max(np.abs(state)) <= 1 + 1e-2, np.max(np.abs(state)) # make sure that the state is within [-1,1]
     M = np.max(np.linalg.norm(target_states, axis = 1))
     energy = -beta**-1 * np.log(np.sum(np.exp(beta*np.dot(target_states, state)))) + 0.5*state@state + beta**-1 * np.log(len(target_states)) + 0.5*M
     return energy
