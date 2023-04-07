@@ -43,8 +43,8 @@ class Hopfield_Continuous(Callable):
         state = state.copy()
         energy = np.infty
         max_iter = 10
-        while compute_energy(state, self.patterns, beta=1.) < energy - 1e-6 and max_iter > 0:
-            state = update(state, self.patterns, beta=1)
+        while self.compute_energy(state, self.patterns, beta=1.) < energy - 1e-6 and max_iter > 0:
+            state = self.update(state, self.patterns, beta=1)
             max_iter -= 1
         return state
         
