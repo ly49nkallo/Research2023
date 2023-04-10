@@ -27,17 +27,25 @@ class Hopfield_Continuous(Callable):
     def __len__(self): return self.size
     @property
     def beta(self): return self.beta
-
+    
     @staticmethod
     def compute_energy(state, target_states, beta=1):
         assert np.max(np.abs(state)) <= 1 + 1e-2, np.max(np.abs(state)) # make sure that the state is within [-1,1]
         M = np.max(np.linalg.norm(target_states, axis = 1))
-        energy = -beta**-1 * np.log(np.sum(np.exp(beta*np.dot(target_states, state)))) + 0.5*state@state + beta**-1 * np.log(len(target_states)) + 0.5*M
+        energy = -beta**-1 * np.log(np.sum(np.exp(beta*np.dot(target_states, state)))) + \
+        0.5*state@state + beta**-1 * np.log(len(target_states)) + 0.5*M
         return energy
     
     @staticmethod
     def update(state:np.ndarray, target_states:np.ndarray, beta=1) -> np.ndarray:
-        new_state = target_states.T@utils.stable_softmax(beta*np.dot(target_states,state))
+        def stable_softmax(x:np.ndarray):
+            z = x - max(x)
+            numerator = np.exp(z)
+            denominator = np.sum(numerator)
+            softmax = numerator/denominator
+            return softmax
+        
+        new_state = target_states.T@stable_softmax(beta*np.dot(target_states,state))
         return new_state
     
     def __call__(self, state:np.ndarray):
@@ -51,6 +59,7 @@ class Hopfield_Continuous(Callable):
             state = self.update(state, self.patterns, beta=1)
             max_iter -= 1
         return state
+    
 if __name__ == '__main__':
     main()
 
