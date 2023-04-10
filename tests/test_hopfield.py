@@ -2,18 +2,19 @@ import unittest
 import numpy as np
 from typing import Union, Optional
 from collections.abc import Callable
+import matplotlib.pyplot as plt
 
 class Hopfield_Continuous(Callable):
     '''Class Defining a Hopfield Energy-Based Associative Memory Network'''
     def __init__(self, 
                  dimension:int, 
                  patterns:Union[np.ndarray, list],
-                 beta:Optional[float]):
+                 beta:Optional[float] = 1) -> None:
         self.dimension = dimension
         self.patterns = patterns if isinstance(patterns, np.ndarray) else np.array(patterns)
-        if self.patterns.dtype not in [np.float16, np.float32, np.float64, np.float128]:
+        if self.patterns.dtype not in [np.float16, np.float32, np.float64]:
             self.patterns = self.patterns.astype(np.float32)
-        self.beta = beta
+        # self.beta = beta
 
     @property
     def size(self): return self.dimension    
@@ -56,4 +57,8 @@ class Hopfield_Continuous(Callable):
 class TestHopfild(unittest.TestCase):
     def test1(self):
         '''Remember solid ones'''
-        target_state = np.ones((10,10), dtype=np.float16))
+        target_state = np.ones((10,10), dtype=np.float16).flatten()
+        hf = Hopfield_Continuous(10*10, [target_state])
+        init_state = np.random.rand(10,10).flatten()
+        out = hf(init_state)
+        assert (out == target_state).all() or (out == -target_state).all(), "network did not converge to target state"
