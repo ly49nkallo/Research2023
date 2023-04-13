@@ -48,7 +48,7 @@ def display(img:list, avs:list):
     ani = animation.ArtistAnimation(fig, frames, interval=1, blit=True,
                                     repeat_delay=1000)
     axs[1] = ani
-    axs[0].hist(avs, bins = max(avs), log=True)
+    axs[0].hist(avs[50**2:], bins = max(avs), log=True)
     #
     plt.show()
 
