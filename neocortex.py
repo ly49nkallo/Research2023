@@ -11,6 +11,9 @@ def main():
     data = df[:,1:]
     del df
     # Memorize MNIST dataset into hopfield networks
+    networks = []
+    for i in range(100):
+        networks.append(Hopfield_Continuous(28**2, [data[i:i+10]]))
 
 class Hopfield_Continuous(Callable):
     '''Class Defining a Hopfield Energy-Based Associative Memory Network'''
