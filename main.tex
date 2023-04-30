@@ -5,12 +5,43 @@
 \usepackage{amsthm}
 \usepackage{bm}
 
-\title{Research Paper}
+\title{Investigating the Presence of Self-Organized Criticality in Neural Networks}
 \author{Ty Brennan, Dr. Ashforth}
 \date{\today}
 
 \begin{document}
 \maketitle
+
+\section*{Abstract}
+
+The human brain is an incredibly complex system with unparalleled efficiency and capabilities, but very little is known about how the brain gives rise to cognition. 
+Recent studies have consistently demonstrated that the brain functions near a critical state, a network state that lies between chaotic and ordered structures. 
+Supercritical and subcritical states of the brain may lead to epilepsy or comas. 
+Modern advances in artificial intelligence have become synonymous with the artificial neural network (ANN), a computer program inspired by networks of neurons in the brain. 
+Although ANNs have been capable of many amazing feats, from human-like text generation to facial recognition, they are still a far cry from their biological inspiration. 
+However, due to their powerful computational abilities, the network formed by the ANN may still operate near a critical state. 
+We experimented with the generation of neuronal avalanches in a multilayer perceptron model trained to classify handwritten digits (MNIST) [3] and the presence of critical phenomena during network operation. 
+We show that the activation ratio is very close to one. From these results, we show that criticality is strongly exhibited in the trained multi-perceptron model.  
+
+\section*{Introduction}
+Criticality is often described as the boundary between order and disorder.
+A common example of a critical system is a sandpile -- where adding individual grains of sand can randomly cause an avalanche of activity. 
+Strong experimental evidence points to the existence of a critical state within the human cortex, with supercritical and subcritical states being associated with epilepsy and comatose states, respectively. 
+Firing neurons can cause neuronal avalanches of activity, leading to a cascade of resultant firings in downstream neurons -- like avalanches of sand on a sandpile. 
+The extent of these neuronal avalanches follows a power law, which is indicative of a self-organized critical system, that is, a system that tends towards a point of criticality without external help.
+Although there does not exist a working model of the human brain, artificial neural networks have recently powered a revolution in artificial intelligence. 
+Additionally, any system near a point of criticality has enhanced information transmission capabilities, and high correlation (that is, the extent to which distant parts of the system interact), properties that are theorized to be valuable to intelligent systems. 
+Artificial neural networks are a leading paradigm that has recently dominated machine learning. The ANN comprises a graph of densely connected nodes, each designed to function like a highly simplified biological neuron. 
+The presence of criticality in trained ANNs can help guide our understanding of the importance of criticality in neuronal systems in general. 
+
+
+
+\section*{Methods}
+\section*{Results}
+\section*{Discussion}
+\section*{Acknowledgements}
+\section*{Bibliography}
+
 \textbf{Topic(s):}
 \begin{enumerate}
     \item Enforcing Supercriticality in Hopfield neural networks
@@ -21,14 +52,7 @@
     \item Boltzmann machines
     \item Biologically plausiable neural network
 \end{enumerate}
-\section*{Abstract}
-\section*{Introduction}
-\section*{Purpose}
-\section*{Methods}
-\section*{Results}
-\section*{Discussion}
-\section*{Acknowledgements}
-\section*{Bibliography}
+
 \[E = -\text{lse}(\beta,\bm{X}^T\bm{\xi})+\frac 1 2 \bm{\xi}^T\bm{\xi} + \beta^{-1}\log{N} + \frac 1 2 M^2\]
 \[E_1(\bm{\xi}) = \frac 1 2 \bm{\xi}^T\bm{\xi}\]
 \[E_2(\bm{\xi}) = -\text{lse}(\beta, \bm{X}^T\bm{\xi})\]
