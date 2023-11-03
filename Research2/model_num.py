@@ -77,7 +77,6 @@ if __name__ == '__main__':
         params = np.array(params)
         params[11] = 0.6
 
-
     x = np.array(x0)
     dt = 1e-2
     steps = 1e6
