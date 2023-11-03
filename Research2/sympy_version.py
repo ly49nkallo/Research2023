@@ -10,12 +10,10 @@ def Hopf_dots(mu, w0, alpha, beta, X, Y):
     Y_dot = mu*Y + w0*X - (alpha*Y + beta*X)*(X**2 + Y**2)
     return X_dot, Y_dot
 
-def Hopf_dots_sympy():
-    X_dot, Y_dot = spy.symbols('X_dot Y_dot')
-    mu, w0, alpha, beta, X, Y = spy.symbols('mu w0 alpha beta X Y')
+def Hopf_dots_sympy(mu, w0, alpha, beta, X, Y):
     return (
-        spy.Eq(X_dot, mu * X - w0 * Y - (alpha * X - beta * Y) * (X ** 2 + Y ** 2)), 
-        spy.Eq(Y_dot, mu*Y + w0*X - (alpha*Y + beta*X)*(X**2 + Y**2))
+        mu * X - w0 * Y - (alpha * X - beta * Y) * (X ** 2 + Y ** 2),
+        mu*Y + w0*X - (alpha*Y + beta*X)*(X**2 + Y**2)
     )
 
 def Hopf_RK2(mu, w0, alpha, beta, X, Y, dt, D):
@@ -70,4 +68,15 @@ def main():
 
 if __name__ == '__main__':
     init_printing()
-    spy.pprint(Hopf_dots_sympy()[0], use_unicode = False)
+    use_unicode = True
+    X_dot, Y_dot = spy.symbols('X_dot Y_dot')
+    mu, w0, alpha, beta, X, Y = spy.symbols('mu w0 alpha beta X Y')
+    x_dot, y_dot = Hopf_dots_sympy(mu, w0, alpha, beta, X, Y)
+    spy.pprint(x_dot, use_unicode=use_unicode)
+    print()
+    spy.pprint(y_dot, use_unicode=use_unicode)
+    print()
+    # differentiate x_dot
+    diff_x_dot = spy.diff(x_dot, X, Y)
+    diff_y_dot = spy.diff(y_dot, X, Y)
+    spy.pprint(diff_x_dot, use_unicode=use_unicode)
