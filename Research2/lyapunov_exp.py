@@ -25,7 +25,6 @@ def HOPF(N, dt, mu, w0, alpha, beta, D, r0, phi0):
     for i in range(1, N):
         X[i], Y[i] = Hopf_RK2(mu, w0, alpha, beta, X[i-1], Y[i-1], dt, D)
     return X, Y
-
     
 # demonstation of noisy Hopf Oscillator
 def show_demonstration(
@@ -34,7 +33,7 @@ def show_demonstration(
         dt = 0.001,
         mu = 2,
         w0 = 1,
-        alpha = 0.,
+        alpha = 1,
         beta = 1
     ):
 
@@ -45,15 +44,32 @@ def show_demonstration(
     x4 = (np.sqrt(mu)) * np.cos(t)
     y4 = (np.sqrt(mu)) * np.sin(t)
     plt.figure()
+    plt.plot(x4, y4)
     plt.plot(x, y)
     plt.plot(x2, y2)
     plt.plot(x3, y3)
-    plt.plot(x4, y4)
     plt.xlabel('time step')
     plt.ylabel('x(t)')
     
+def lyapunov_exponent(N=30000, dt=0.01, mu=1, w0=1, alpha=1, beta=1, D=0, r0=0.1, phi0=0, epsilon=1e-9):
+    X1, Y1 = HOPF(N, dt, mu, w0, alpha, beta, D, r0, phi0)
+    X2, Y2 = HOPF(N, dt, mu, w0, alpha, beta, D, r0 + epsilon, phi0)
+    d = np.sqrt((X1 - X2) ** 2 + (Y1 - Y2) ** 2)
+    plt.figure()
+    plt.plot(X1, Y1)
+    plt.plot(X2, Y2)
+    plt.title("trajectories")
+    plt.figure()
+    plt.plot(d)
+    plt.xlabel("time")
+    plt.ylabel("distance")
+    plt.title("Distance of trajectories")
+    
+    
+    
 def main():
-    show_demonstration(alpha = 1.0)
+    show_demonstration(N=2000, dt=0.01, mu=2, w0=1, alpha=1, beta=1, D=0)
+    lyapunov_exponent(epsilon = 1e-2)
     plt.show()
 
 if __name__ == '__main__':
