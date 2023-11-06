@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
     x = np.array(x0)
     dt = 1e-2
-    steps = 1e6
+    steps = 2e5
     params[8] = 900
 
     steps_r = 1 / steps * 900
@@ -89,8 +89,11 @@ if __name__ == '__main__':
         params[8] -= steps_r
         x += ret * dt
         xhist.append(x[0])
+        
+    # lyapunov exponent is the time average of log|dF/dx| over every state
+    
+
 
     plt.figure()
     plt.plot(xhist[1000:])
     plt.show()
-
