@@ -59,10 +59,18 @@ def lyapunov_exponent(N=30000, dt=0.01, mu=2, w0=1, alpha=1, beta=1, D=0, r0=0.1
     X1, Y1 = HOPF(N, dt, mu, w0, alpha, beta, D, r0, phi0)
     X2, Y2 = HOPF(N, dt, mu, w0, alpha, beta, D, r0 + epsilon, phi0)
     d = np.sqrt((X1 - X2) ** 2 + (Y1 - Y2) ** 2)[:5000]
-    params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, -1))
+    try:
+        params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, -1))
+    except RuntimeError:
+        print('Runtime Error passed')
+        return None
     if not np.isfinite(np.sum(cv)):
         print('false')
-        params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, 1))
+        try:
+            params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, 1))
+        except RuntimeError as e:
+            print('Runtime Error passed')
+            return None
     if plot:
         Y3 = np.array(exp(np.arange(0, 5000), *params))
         print(params[1], cv)
@@ -74,18 +82,22 @@ def lyapunov_exponent(N=30000, dt=0.01, mu=2, w0=1, alpha=1, beta=1, D=0, r0=0.1
         plt.title("Distance of trajectories")
         plt.show()
     return params[1]
+
+def plot_lyapunov_exponents(N):
+    mus = np.linspace(0.255, 0.28, 100)
+    lambdas = []
+    for mu in tqdm(mus):
+        lambdas.append(lyapunov_exponent(N=N, mu = mu, r0 = 1 / 2, plot=mu == mus[43] or mu == mus[0] or mu == mus[-1]))
+    print(list(zip(mus, lambdas)))
+    plt.figure()
+    plt.plot(mus, lambdas)
+    plt.show()
     
     
 def main():
     N = 30000
-    # show_demonstration(N=N, dt=0.001, mu=2, w0=1, alpha=1, beta=1, D=0)
-    mus = np.linspace(-1, 1, 50)
-    lambdas = []
-    for mu in tqdm(mus):
-        lambdas.append(lyapunov_exponent(N=N, mu = mu, r0 = 1 / 2))
-    print(list(zip(mus, lambdas)))
-    plt.figure()
-    plt.plot(mus, lambdas)
+    # show_demonstration(N=N, dt=0.01, mu=0.265, w0=1, alpha=1, beta=1, D=0)
+    plot_lyapunov_exponents(N)
     plt.show()
 if __name__ == '__main__':
     main()

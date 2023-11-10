@@ -62,10 +62,10 @@ def derivative(x: np.ndarray, p: np.ndarray) -> np.ndarray:
     dpgs = (Cgs * pT * (1 - pgs) - pgs) / taugs0
     dpT = (pT_inf - pT) / tauT0
 
-    return np.array([dxhb, dxa, dpm, dpgs, dpT])
+    return [dxhb, dxa, dpm, dpgs, dpT]
 
 if __name__ == '__main__':
-    xhist = []
+    hist = []
     x0 = -1, 0, .5, .5, .5
     import json
     from tqdm import tqdm
@@ -74,26 +74,28 @@ if __name__ == '__main__':
     with open(os.path.dirname(__file__) + os.sep  + './model_values.json', 'r') as f:
         p = json.load(f)
         params = tuple(p.values())
+        param_names = tuple(p.keys())
         params = np.array(params)
         params[11] = 0.6
 
-    x = np.array(x0)
+    x = list(x0)
     dt = 1e-2
-    steps = 2e5
-    params[8] = 900
+    steps = 1e6
+    # params[8] = 900
 
     steps_r = 1 / steps * 900
 
     for i in tqdm(range(int(steps))):
         ret = derivative(x, params)
         params[8] -= steps_r
-        x += ret * dt
-        xhist.append(x[0])
+        x = [x[i] + ret[i] * dt for i in range(len(x))]
+        hist.append(tuple(x))
         
     # lyapunov exponent is the time average of log|dF/dx| over every state
     
 
-
-    plt.figure()
-    plt.plot(xhist[1000:])
-    plt.show()
+    for i, name in enumerate(['xhb', 'xa', 'pm', 'pgs', 'pT']):
+        plt.figure()
+        plt.title(name)
+        plt.plot([x[i] for x in hist][1000:])
+        plt.show()
