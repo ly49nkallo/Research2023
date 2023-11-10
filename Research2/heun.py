@@ -26,7 +26,6 @@ def HOPF(N, dt, mu, w0, alpha, beta, D, r0, phi0):
         X[i], Y[i] = Hopf_RK2(mu, w0, alpha, beta, X[i-1], Y[i-1], dt, D)
     return X, Y
 
-    
 # demonstation of noisy Hopf Oscillator
 def show_demonstration(
         D = 0.000,
@@ -34,7 +33,7 @@ def show_demonstration(
         dt = 0.001,
         mu = 2,
         w0 = 1,
-        alpha = 0.,
+        alpha = 1,
         beta = 1
     ):
 
@@ -53,7 +52,7 @@ def show_demonstration(
     plt.ylabel('x(t)')
     
 def main():
-    show_demonstration(alpha = 1.0)
+    show_demonstration(alpha = 1)
     plt.show()
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+from scipy.optimize import curve_fit
 
 def Hopf_dots(mu, w0, alpha, beta, X, Y):
     X_dot = mu*X - w0*Y - (alpha*X - beta*Y)*(X**2 + Y**2)
@@ -44,33 +45,47 @@ def show_demonstration(
     x4 = (np.sqrt(mu)) * np.cos(t)
     y4 = (np.sqrt(mu)) * np.sin(t)
     plt.figure()
-    plt.plot(x4, y4)
     plt.plot(x, y)
     plt.plot(x2, y2)
     plt.plot(x3, y3)
+    plt.plot(x4, y4)
     plt.xlabel('time step')
     plt.ylabel('x(t)')
     
-def lyapunov_exponent(N=30000, dt=0.01, mu=1, w0=1, alpha=1, beta=1, D=0, r0=0.1, phi0=0, epsilon=1e-9):
+def exp(t, a, lyp):
+    return a * np.exp(lyp * t) - a + 1e-2
+    
+def lyapunov_exponent(N=30000, dt=0.01, mu=2, w0=1, alpha=1, beta=1, D=0, r0=0.1, phi0=0, epsilon=1e-2, plot=False):
     X1, Y1 = HOPF(N, dt, mu, w0, alpha, beta, D, r0, phi0)
     X2, Y2 = HOPF(N, dt, mu, w0, alpha, beta, D, r0 + epsilon, phi0)
-    d = np.sqrt((X1 - X2) ** 2 + (Y1 - Y2) ** 2)
-    plt.figure()
-    plt.plot(X1, Y1)
-    plt.plot(X2, Y2)
-    plt.title("trajectories")
-    plt.figure()
-    plt.plot(d)
-    plt.xlabel("time")
-    plt.ylabel("distance")
-    plt.title("Distance of trajectories")
-    
+    d = np.sqrt((X1 - X2) ** 2 + (Y1 - Y2) ** 2)[:5000]
+    params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, -1))
+    if not np.isfinite(np.sum(cv)):
+        print('false')
+        params, cv = curve_fit(exp, np.arange(0, 5000), d, p0 = (1, 1))
+    if plot:
+        Y3 = np.array(exp(np.arange(0, 5000), *params))
+        print(params[1], cv)
+        plt.figure()
+        plt.plot(d)
+        plt.plot(Y3)
+        plt.xlabel("time")
+        plt.ylabel("distance")
+        plt.title("Distance of trajectories")
+        plt.show()
+    return params[1]
     
     
 def main():
-    show_demonstration(N=2000, dt=0.01, mu=2, w0=1, alpha=1, beta=1, D=0)
-    lyapunov_exponent(epsilon = 1e-2)
+    N = 30000
+    # show_demonstration(N=N, dt=0.001, mu=2, w0=1, alpha=1, beta=1, D=0)
+    mus = np.linspace(-1, 1, 50)
+    lambdas = []
+    for mu in tqdm(mus):
+        lambdas.append(lyapunov_exponent(N=N, mu = mu, r0 = 1 / 2))
+    print(list(zip(mus, lambdas)))
+    plt.figure()
+    plt.plot(mus, lambdas)
     plt.show()
-
 if __name__ == '__main__':
     main()
