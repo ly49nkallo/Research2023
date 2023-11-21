@@ -70,7 +70,7 @@ if __name__ == '__main__':
     xs = np.linspace(0, time_steps, round(time_steps / dt))
     ys = [ly_exp(t, *params) for t in xs]
     ax.plot(xs, ys, 'g--')
-    equation_string = f'$y={params[0]:.2f}e^{{{params[1]:.2f}}}t$'
+    equation_string = f'$y={params[0]:.2f}e^{{{params[1]:.2f}t}}$'
     plt.text(0.3, 0.7, equation_string, horizontalalignment='center',
         verticalalignment='top', transform=ax.transAxes, usetex=True, fontsize=12) 
     plt.show()
