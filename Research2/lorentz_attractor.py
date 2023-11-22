@@ -36,8 +36,11 @@ def RK2(x0, y0, z0, time_steps, dt):
 def moving_average(x, w):
     return np.convolve(x, np.ones(w), 'same') / w
 
+def ly_exp_lin(t, a, lyp):
+    return a + lyp * t
+
 def ly_exp(t, a, lyp):
-    return a * np.exp(lyp * t)
+    return np.exp(ly_exp_lin(t, a, lyp))
 
 if __name__ == '__main__':
     dt = 0.0001
@@ -48,8 +51,8 @@ if __name__ == '__main__':
     hist2 = RK2(x0, y0, z0 + epsilon, time_steps, dt)
     # dist = sqrt(dx^2 + dy^2 + dz^2)
     distances = np.sqrt((np.abs(hist1 - hist2) ** 2).sum(axis = 1)) 
-    params, cv = curve_fit(ly_exp, np.linspace(0, time_steps, round(time_steps / dt)), distances, [epsilon, 0])
-    params[1] += .8 - 0.03
+    log_dist = np.log(distances)
+    params, cv = curve_fit(ly_exp_lin, np.linspace(0, time_steps, round(time_steps / dt)), log_dist, [epsilon, 0])
     print (params, cv)
     plt.figure(1)
     ax = plt.axes(projection='3d')
