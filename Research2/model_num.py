@@ -76,18 +76,18 @@ if __name__ == '__main__':
         params = tuple(p.values())
         param_names = tuple(p.keys())
         params = np.array(params)
-        params[11] = 0.6
+        # params[11] = 0.6
 
     x = list(x0)
     dt = 1e-2
-    steps = 1e6
+    steps = 1e7
     # params[8] = 900
 
     steps_r = 1 / steps * 900
 
     for i in tqdm(range(int(steps))):
         ret = derivative(x, params)
-        params[8] -= steps_r
+        # params[8] -= steps_r
         x = [x[i] + ret[i] * dt for i in range(len(x))]
         hist.append(tuple(x))
         
