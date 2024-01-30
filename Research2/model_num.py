@@ -159,11 +159,16 @@ if __name__ == '__main__':
     #     x = [x[i] + ret[i] * dt for i in range(len(x))]
     #     hist.append(tuple(x))
         
-    # lyapunov exponent is the time average of log|dF/dx| over every state
+    # lyapunov exponent is the time average of log|dF/dx| over every state 
+    th = int(100/dt)
     for i, name in enumerate(['xhb', 'xa', 'pm', 'pgs', 'pT']):
         plt.figure(i+1)
         plt.title(name)
-        plt.plot([x[0] for x in hist[1000:]], [x[i] for x in hist][1000:])
+        plt.plot([x[0] for x in hist[th:]], [x[i] for x in hist][th:])
         plt.savefig(f'./Phase_diagram {i}.png')
-
+    sample_point = (hist[int(3*dt)][0], hist[int(3*dt)][1])
+    # Find nearby points
+    for x, y in zip([x[0] for x in hist[th:]], [x[i] for x in hist][th:]):
+        pass
+    print(sample_point)
     plt.show()
