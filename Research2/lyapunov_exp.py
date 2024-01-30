@@ -92,8 +92,7 @@ def plot_lyapunov_exponents(N):
     plt.figure()
     plt.plot(mus, lambdas)
     plt.show()
-    
-    
+        
 def main():
     N = 30000
     # show_demonstration(N=N, dt=0.01, mu=0.265, w0=1, alpha=1, beta=1, D=0)
