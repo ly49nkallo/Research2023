@@ -79,7 +79,23 @@ def derivative(x: list, p: list) -> np.ndarray:
 
     return [dxhb, dxa, dpm, dpgs, dpT]
 
-def calculate_data(x0:list, timesteps:int, dt:float, param_file:str='./model_values.json', method:str='RK2') -> np.ndarray:
+def load_param_file(param_file:str='./model_values.json', give_param_names:bool = False):
+    logging.info(f"loaded {param_file}")
+    filepath = Path(param_file)
+    try:
+        with open(filepath, 'r') as f:
+            p = json.load(f)
+            params = list(p.values())
+            param_names = tuple(p.keys())
+    except FileNotFoundError as e:
+        logging.error("FILE NOT FOUND! MAKE SURE PYTHON IS EXECUTING IN CORRECT WORKING DIRECTORY!")
+        exit(1)
+    if give_param_names:
+        return params, param_names
+    else:
+        return params    
+
+def calculate_data(x0:list, timesteps:int, dt:float, params, method:str='RK2') -> np.ndarray:
     '''
     Calculate, record, and return all of the parameter values in a full simulation.
     @Params
@@ -98,11 +114,6 @@ def calculate_data(x0:list, timesteps:int, dt:float, param_file:str='./model_val
         np.ndarray
             Numpy array with shape (5, t), where t is the number of timesteps that are elapsed
     '''
-    filepath = Path(param_file)
-    with open(os.path.dirname(__file__) + os.sep  + './model_values.json', 'r') as f:
-        p = json.load(f)
-        params = list(p.values())
-        param_names = tuple(p.keys())
     hist = None
     if method == 'RK2':
         hist = _RK2_calculate_data(x0, timesteps, dt, params)
@@ -134,22 +145,20 @@ def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params)->np.ndarray:
 
     return hist
 
+def get_parameter_names()->list:
+    return ['xhb', 'xa', 'pm', 'pgs', 'pT']
+
+def get_good_default_initial_values()->list:
+    return [-1., 0., .5, .5, .5]
+
 if __name__ == '__main__':
     hist = []
-    x0 = -1, 0, .5, .5, .5
-
-    with open(os.path.dirname(__file__) + os.sep  + './model_values.json', 'r') as f:
-        p = json.load(f)
-        params = tuple(p.values())
-        param_names = tuple(p.keys())
-        params = np.array(params)
-        # params[11] = 0.6
-
-    x = list(x0)
+    x = get_good_default_initial_values()
     dt = 5e-1
     steps = 5e4
-
-    hist = calculate_data(x, steps, dt)
+    param_file='./model_values_edited.json'
+    params = load_param_file(param_file)
+    hist = calculate_data(x, steps, dt, params)
     # params[8] = 900
     # steps_r = 1 / steps * 900
 
@@ -161,11 +170,14 @@ if __name__ == '__main__':
         
     # lyapunov exponent is the time average of log|dF/dx| over every state 
     th = int(100/dt)
-    for i, name in enumerate(['xhb', 'xa', 'pm', 'pgs', 'pT']):
-        plt.figure(i+1)
+    for i, name in enumerate(get_parameter_names()):
+        if i != 1: continue
+        plt.figure()
         plt.title(name)
         plt.plot([x[0] for x in hist[th:]], [x[i] for x in hist][th:])
         plt.savefig(f'./Phase_diagram {i}.png')
+        plt.figure()
+        plt.plot([x[i] for x in hist][th:])
     sample_point = (hist[int(3*dt)][0], hist[int(3*dt)][1])
     # Find nearby points
     for x, y in zip([x[0] for x in hist[th:]], [x[i] for x in hist][th:]):
