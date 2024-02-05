@@ -95,7 +95,7 @@ def load_param_file(param_file:str='./model_values.json', give_param_names:bool 
     else:
         return params    
 
-def calculate_data(x0:list, timesteps:int, dt:float, params, method:str='RK2') -> np.ndarray:
+def calculate_data(x0:list, timesteps:int, dt:float, params:list, method:str='RK2', progess_bar:bool=True) -> np.ndarray:
     '''
     Calculate, record, and return all of the parameter values in a full simulation.
     @Params
@@ -105,11 +105,13 @@ def calculate_data(x0:list, timesteps:int, dt:float, params, method:str='RK2') -
             the exact number of timesteps the simulation should run
         dt:float
             the integrating delta w.r.t. time.
+        params:list
+            a list containing the hyperparameters
     @Keyword
-        param_file:str
-            the directory path to a json file containing the model hyperparameters
         method:str
             How to integrate the trajectory; [Euler, RK2, RK3, RK4]
+        progress_bar:bool
+            Should the function display a progress bar during execution?
     @Returns
         np.ndarray
             Numpy array with shape (5, t), where t is the number of timesteps that are elapsed
@@ -119,7 +121,7 @@ def calculate_data(x0:list, timesteps:int, dt:float, params, method:str='RK2') -
         hist = _RK2_calculate_data(x0, timesteps, dt, params)
     return hist
 
-def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params)->np.ndarray:
+def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)->np.ndarray:
     timesteps = int(timesteps)
     logging.info("Beginning RK2 simulation")
     x = x0
@@ -137,7 +139,11 @@ def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params)->np.ndarray:
         y += (yk1 + yk2) / 2 * dt
         z += (zk1 + zk2) / 2 * dt
     '''
-    for i in tqdm(range(timesteps)):
+    if spb:
+        iterator = tqdm(range(timesteps))
+    else:
+        iterator = range(timesteps)
+    for i in iterator:
         hist[i] = x
         k1 = derivative(x, params)
         k2 = derivative([a + b for a,b in zip(x, [d * dt for d in k1])], params)
