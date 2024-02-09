@@ -118,7 +118,7 @@ def calculate_data(x0:list, timesteps:int, dt:float, params:list, method:str='RK
     '''
     hist = None
     if method == 'RK2':
-        hist = _RK2_calculate_data(x0, timesteps, dt, params)
+        hist = _RK2_calculate_data(x0, timesteps, dt, params, progess_bar)
     return hist
 
 def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)->np.ndarray:

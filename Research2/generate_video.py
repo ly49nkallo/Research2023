@@ -8,17 +8,17 @@ def generate_video1(img)->animation.ArtistAnimation:
     @Params
         img:list
             list of data with shape (n, h, w) (MAKE SURE THEY ARE FLOATS)
-    @Returns
+    @Returns NOT REALLY
         animation.ArtistAnimation
     '''
     frames = [] # for storing the generated images
     fig = plt.figure()
     for i in range(len(img)):
-        frames.append([plt.imshow(img[i], cmap=cm.Greys_r,animated=True)])
-
+        implot = plt.imshow(img[i], cmap=cm.Greys_r)
+        frames.append([implot])
     ani = animation.ArtistAnimation(fig, frames, interval=50, blit=True,
-                                    repeat_delay=1000)
-    return ani
+                                    repeat_delay=100)
+    plt.show()
 
 def generate_video2(plots)->animation.ArtistAnimation:
     '''
@@ -26,15 +26,16 @@ def generate_video2(plots)->animation.ArtistAnimation:
     @Params
         plots:list
             list of plotting artists (MAKE SURE THEY ARE ARTISTS!)
-    @Returns
+    @Returns NOT REALLY
         animation.ArtistAnimation
     '''
     fig = plt.figure()
-    ani = animation.ArtistAnimation(plots)
-    return ani
+    ani = animation.ArtistAnimation(fig, plots, interval=50, blit=True, repeat_delay=100)
+    plt.show()
 
 if __name__ == '__main__':
     import numpy as np
     fake_data = np.random.randn(10, 10, 10)
     generate_video1(fake_data)
-    plt.show()
+    fake_data = np.random.randn(10, 10)
+    generate_video2
