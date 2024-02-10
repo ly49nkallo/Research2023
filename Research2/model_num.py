@@ -95,7 +95,7 @@ def load_param_file(param_file:str='./model_values.json', give_param_names:bool 
     else:
         return params    
 
-def calculate_data(x0:list, timesteps:int, dt:float, params:list, method:str='RK2', progess_bar:bool=True) -> np.ndarray:
+def calculate_data(x0:list, timesteps:int, dt:float, params:list, method:str='RK2', progress_bar:bool=True) -> np.ndarray:
     '''
     Calculate, record, and return all of the parameter values in a full simulation.
     @Params
@@ -118,7 +118,7 @@ def calculate_data(x0:list, timesteps:int, dt:float, params:list, method:str='RK
     '''
     hist = None
     if method == 'RK2':
-        hist = _RK2_calculate_data(x0, timesteps, dt, params, progess_bar)
+        hist = _RK2_calculate_data(x0, timesteps, dt, params, progress_bar)
     return hist
 
 def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)->np.ndarray:
@@ -152,9 +152,11 @@ def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)
     return hist
 
 def get_parameter_names()->list:
+    """'xhb', 'xa', 'pm', 'pgs', 'pT'"""
     return ['xhb', 'xa', 'pm', 'pgs', 'pT']
 
 def get_good_default_initial_values()->list:
+    """-1., 0., .5, .5, .5"""
     return [-1., 0., .5, .5, .5]
 
 if __name__ == '__main__':
