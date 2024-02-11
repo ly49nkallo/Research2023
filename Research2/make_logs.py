@@ -1,8 +1,6 @@
 from pathlib import Path
 import model_num as mn
 import os
-import time
-import json
 
 class DataLogger:
     _file_handle:Path = None
@@ -35,42 +33,41 @@ class DataLogger:
         self.blank()
 
     def write_overview(self, **kwargs):
+        if len(kwargs) == 0: return
         self.write("| Model Parameter | Value |")
         self.write("| :-------------: | :---: |")
         for p in kwargs:
             self.write("| " + str(p) + " | " + str(kwargs[p]) + " |")
         self.blank()
+    
+    def write_preamble(self, **kwargs):
+        self.write_top_header()
+        self.write_overview(**kwargs)
 
-    def write_for_parameter(self, param:str, d, time_started, elapsed_time):
+    def write_for_parameter(self, param:str, values_arr:list, wavelength_arr:list, is_periodic_arr:list, time_started, elapsed_time):
         '''
         @Params:
             param:str
                 the name of the parameter
-            d:list
-                a list of 3-tuples that represent the value of the parameter, its wavelength, and its periodicity
         '''
+        d = list(zip(values_arr, wavelength_arr, is_periodic_arr))
         self.write(f'## Parameter \"{param}\"')
         self.blank()
         self.write(f'Time started: {time_started}')
         self.blank()
-        with open("./model_values.json", 'r') as f:
-            dparams = json.load(f)    
-            dv = dparams[param]
-        self.write(f"Default value: {dv}")
-        self.blank()
-        self.write("| Value | Periodic? |") 
-        self.write("| :---: | :---: |")
+        self.write("| Value | Wavelength | Periodic? |") 
+        self.write("| :---: | :---: | :---: |")
         for v, wl, p in d:
             self.write(f'| {v} | {wl} | {str(p)} |')
         self.blank()
         self.write(f'Elapsed time: {elapsed_time}')
-        
         
         pass
 
 if __name__ == "__main__":
     # test Datalogger
     dl = DataLogger()
-    dl.set_file_handle('./test_file.md')
+    dl.set_file_handle('./test_log.md')
     dl.write_top_header()
     dl.write_overview(param1=0.1, param2=0.5, paramA = "RK3")
+    dl.write_for_parameter("Xhb", [0.11], [45], [True], 0, 100.0011)

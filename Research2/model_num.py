@@ -151,9 +151,29 @@ def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)
 
     return hist
 
-def get_parameter_names()->list:
+def get_variable_names()->list:
     """'xhb', 'xa', 'pm', 'pgs', 'pT'"""
     return ['xhb', 'xa', 'pm', 'pgs', 'pT']
+
+def get_parameter_names()->list:
+    
+    return [
+        "tauhb0",
+        "taum0",
+        "taugs0",
+        "tauT0",
+        "Cmin",
+        "Smax",
+        "Smin",
+        "Cm",
+        "Cgs",
+        "Ugsmax",
+        "dE0",
+        "kgsmin",
+        "chihb",
+        "chia",
+        "xc"
+    ]
 
 def get_good_default_initial_values()->list:
     """-1., 0., .5, .5, .5"""
