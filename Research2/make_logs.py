@@ -1,6 +1,8 @@
 from pathlib import Path
 import model_num as mn
 import os
+import time
+import json
 
 class DataLogger:
     _file_handle:Path = None
@@ -39,7 +41,7 @@ class DataLogger:
             self.write("| " + str(p) + " | " + str(kwargs[p]) + " |")
         self.blank()
 
-    def write_for_parameter(self, param:str, d):
+    def write_for_parameter(self, param:str, d, time_started, elapsed_time):
         '''
         @Params:
             param:str
@@ -47,6 +49,23 @@ class DataLogger:
             d:list
                 a list of 3-tuples that represent the value of the parameter, its wavelength, and its periodicity
         '''
+        self.write(f'## Parameter \"{param}\"')
+        self.blank()
+        self.write(f'Time started: {time_started}')
+        self.blank()
+        with open("./model_values.json", 'r') as f:
+            dparams = json.load(f)    
+            dv = dparams[param]
+        self.write(f"Default value: {dv}")
+        self.blank()
+        self.write("| Value | Periodic? |") 
+        self.write("| :---: | :---: |")
+        for v, wl, p in d:
+            self.write(f'| {v} | {wl} | {str(p)} |')
+        self.blank()
+        self.write(f'Elapsed time: {elapsed_time}')
+        
+        
         pass
 
 if __name__ == "__main__":
