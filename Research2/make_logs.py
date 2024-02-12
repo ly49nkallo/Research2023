@@ -5,17 +5,22 @@ import os
 class DataLogger:
     _file_handle:Path = None
     _video_directory:Path = None
-
+    
     def set_file_handle(self, filepath:str):
         self._file_handle = Path(filepath)
-        if self._file_handle.exists():
-            os.remove(self._file_handle)
-        self._file_handle.touch()
+        self.reset_file()
         assert filepath.endswith('md')
     
     def get_file_handle(self):
         return self._file_handle
 
+    def reset_file(self):
+        if self._file_handle is None:
+            raise Exception
+        if self._file_handle.exists():
+            os.remove(self._file_handle)
+        self._file_handle.touch() 
+        
     def write(self, string:str)->bool:
         if self._file_handle is None:
             return False
