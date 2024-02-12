@@ -49,15 +49,16 @@ class DataLogger:
         self.write_top_header()
         self.write_overview(**kwargs)
 
-    def write_for_parameter(self, param:str, values_arr:list, wavelength_arr:list, is_periodic_arr:list, time_started, elapsed_time):
+    def write_for_parameter(self, param:str, values_arr:list, wavelength_arr:list, is_periodic_arr:list, time_started, elapsed_time, write_header=True):
         '''
         @Params:
             param:str
                 the name of the parameter
         '''
         d = list(zip(values_arr, wavelength_arr, is_periodic_arr))
-        self.write(f'## Parameter \"{param}\"')
-        self.blank()
+        if write_header:
+            self.write(f'## Parameter \"{param}\"')
+            self.blank()
         self.write(f'Time started: {time_started}')
         self.blank()
         self.write("| Value | Wavelength | Periodic? |") 
