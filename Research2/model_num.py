@@ -63,11 +63,11 @@ def derivative(x: list, p: list) -> np.ndarray:
 
     Cmax = 1 - Smax
 
-    kgs = kgs_func(pgs, kgsmin)
-    xgs = xgs_func(xhb, xa, chihb, chia, xc)
-    Fgs = Fgs_func(pT, kgs, xgs)
+    kgs = kgs_func(pgs, kgsmin) #Gating spring stiffness
+    xgs = xgs_func(xhb, xa, chihb, chia, xc) #Gating spring displacement
+    Fgs = Fgs_func(pT, kgs, xgs) #Force 
     C = C_func(pm, Cmin)
-    S = S_func(pm, Smin)
+    S = S_func(pm, Smin) #Rate of slipping
 
     pT_inf = pTinf_func(kgs, xgs, Ugsmax, dE0)
 
