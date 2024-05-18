@@ -145,11 +145,14 @@ def _RK2_calculate_data(x0:list, timesteps:int, dt:float, params:list, spb:bool)
         iterator = range(timesteps)
     for i in iterator:
         hist[i] = x
-        k1 = derivative(x, params)
-        k2 = derivative([a + b for a,b in zip(x, [d * dt for d in k1])], params)
-        x =  [c + (a + b) / 2 * dt for a, b, c in zip(k1, k2, x)]
-
+        x = RK2_calcululate_data_one_timestep(dt, params, x)
     return hist
+
+def RK2_calcululate_data_one_timestep(dt:float, params:list, x:list):
+    k1 = derivative(x, params)
+    k2 = derivative([a + b for a,b in zip(x, [d * dt for d in k1])], params)
+    ret =  [c + (a + b) / 2 * dt for a, b, c in zip(k1, k2, x)]
+    return ret
 
 def get_variable_names()->list:
     """'xhb', 'xa', 'pm', 'pgs', 'pT'"""
